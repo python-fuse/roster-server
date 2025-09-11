@@ -9,6 +9,10 @@ class UserService {
     return prisma.user.findUnique({ where: { id } });
   }
 
+  async getUserByEmail(email: string) {
+    return prisma.user.findUnique({ where: { email } });
+  }
+
   async createUser(user: Omit<User, "id" | "createdAt" | "updatedAt">) {
     return prisma.user.create({ data: user });
   }

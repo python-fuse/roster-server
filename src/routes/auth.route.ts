@@ -1,10 +1,9 @@
-// import authController from "../controllers/auth.controller";
-// import { Router } from "express";
-// import upload from "../middleware/uploadHandler";
+import authController from "../controllers/auth.controller";
+import { Router } from "express";
 
-// const authRouter = Router();
+const authRouter = Router();
 
-// authRouter.post("/register", upload.single("file"), authController.register);
-// authRouter.post("/login", upload.single("file"), authController.login);
+authRouter.post("/register", authController.register);
+authRouter.post("/login", authController.login);
 
-// export default authRouter;
+export default authRouter;

@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 // Import middleware
 import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";
+import authRouter from "./routes/auth.route";
+import userRouter from "./routes/user.route";
 
 // Load environment variables
 dotenv.config();
@@ -40,8 +42,8 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "Server is running" });
 });
 
-// app.use("/api/users", userRouter);
-// app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 // Error handling middleware
 app.use(errorHandler);
