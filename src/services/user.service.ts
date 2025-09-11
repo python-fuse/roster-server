@@ -9,10 +9,6 @@ class UserService {
     return prisma.user.findUnique({ where: { id } });
   }
 
-  async getUserByAdmissionNumber(admissionNumber: string) {
-    return prisma.user.findUnique({ where: { admissionNumber } });
-  }
-
   async createUser(user: Omit<User, "id" | "createdAt" | "updatedAt">) {
     return prisma.user.create({ data: user });
   }
