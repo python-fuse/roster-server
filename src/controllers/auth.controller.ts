@@ -1,6 +1,5 @@
 import authService from "../services/auth.service";
 import { NextFunction, Request, Response } from "express";
-import userService from "../services/user.service";
 import { Role, User } from "@prisma/client";
 
 class AuthController {
@@ -10,6 +9,9 @@ class AuthController {
     try {
       const loginData = await authService.login({ email, password });
       res.status(200).json(loginData);
+      req.session.user = loginData.user;
+
+      req.session.userId = loginData.user.id;
     } catch (e) {
       next(e);
     }

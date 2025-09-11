@@ -2,12 +2,15 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import dotenv from "dotenv";
+import session from "express-session";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 
 // Import middleware
 import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
+import prisma from "./utils/prisma";
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +34,26 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "my-super-secure-secret",
+    saveUninitialized: true,
+    resave: false,
+    cookie: {
+      maxAge: 24 * 3600 * 1000,
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+    },
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000, // 2 minutes
+      dbRecordIdFunction: undefined,
+      dbRecordIdIsSessionId: true,
+    }),
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
