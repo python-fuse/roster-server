@@ -1,7 +1,3 @@
-Here’s a cleaned-up and well-structured version of your **README.md** that follows best practices for open-source documentation:
-
----
-
 # 🖥️ Biometric Face Authentication Server
 
 A **Node.js + TypeScript** server that provides **facial recognition-based authentication** using machine learning models. Users can register with facial data, authenticate using face recognition, and securely manage sessions.
