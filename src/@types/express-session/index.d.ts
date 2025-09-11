@@ -1,3 +1,5 @@
+// src/@types/express-session/index.d.ts
+
 import { User } from "@prisma/client";
 
 declare module "express-session" {
@@ -6,5 +8,3 @@ declare module "express-session" {
     user?: User;
   }
 }
-
-export {};
