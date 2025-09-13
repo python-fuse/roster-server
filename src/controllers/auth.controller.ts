@@ -9,7 +9,6 @@ class AuthController {
     try {
       const loginData = await authService.login({ email, password });
       res.status(200).json(loginData);
-      req.session.user = loginData.user;
 
       req.session.userId = loginData.user.id;
     } catch (e) {

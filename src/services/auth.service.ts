@@ -36,7 +36,10 @@ class AuthService {
     }
 
     if (await compare(password, dbUser.password)) {
-      return { user: dbUser, message: "Login successful" };
+      return {
+        user: { ...dbUser, password: undefined },
+        message: "Login successful",
+      };
     }
 
     throw new ApiError(400, "Incorrect password");

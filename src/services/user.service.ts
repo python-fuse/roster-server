@@ -3,7 +3,16 @@ import prisma from "../utils/prisma";
 
 class UserService {
   async getAllUsers() {
-    return prisma.user.findMany();
+    return prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
   async getUserById(id: string) {
     return prisma.user.findUnique({ where: { id } });
