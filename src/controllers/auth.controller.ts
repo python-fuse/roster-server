@@ -8,11 +8,13 @@ class AuthController {
 
     try {
       const loginData = await authService.login({ email, password });
-      res.status(200).json(loginData);
-
       req.session.userId = loginData.user.id;
+
+      res.status(200).json(loginData);
+      return;
     } catch (e) {
       next(e);
+      return;
     }
   }
 
@@ -28,9 +30,27 @@ class AuthController {
       });
 
       res.status(201).json(newUser);
+      return;
     } catch (e) {
       next(e);
+      return;
     }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    if (req.session.userId) {
+      req.session.destroy((err) => {
+        if (err) {
+          next(new Error("Failed to logout"));
+          return;
+        }
+
+        res.status(200).json({ message: "Logout Successful" });
+      });
+    }
+
+    res.status(400).json({ message: "Your not logged in, Please login!" });
+    return;
   }
 }
 
