@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import { Server } from "socket.io";
+import http from "http";
 
 // Import middleware
 import { errorHandler } from "./middleware/errorHandler";
@@ -15,6 +17,7 @@ import assignmentRouter from "./routes/assignment.route";
 
 // Import Prisma client
 import prisma from "./utils/prisma";
+import { setupSocketHandlers } from "./handlers/socket.handler";
 
 // Load environment variables
 dotenv.config();
@@ -77,8 +80,22 @@ app.use("/api/assignments", assignmentRouter);
 // Error handling middleware
 app.use(errorHandler);
 
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+export const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+setupSocketHandlers(io);
+
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
