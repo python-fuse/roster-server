@@ -10,6 +10,14 @@ class DutyRosterService {
     return await prisma.dutyRoster.findUnique({ where: { id } });
   }
 
+  async getRostersByUserId(userId: DutyRoster["addedById"]) {
+    return await prisma.dutyRoster.findMany({ where: { addedById: userId } });
+  }
+
+  async getRostersByDate(date: DutyRoster["date"]) {
+    return await prisma.dutyRoster.findMany({ where: { date } });
+  }
+
   async createRoster(data: Omit<DutyRoster, "id" | "createdAt" | "updatedAt">) {
     return await prisma.dutyRoster.create({ data });
   }
@@ -17,7 +25,7 @@ class DutyRosterService {
   async updateRoster(id: DutyRoster["id"], data: Partial<DutyRoster>) {
     return await prisma.dutyRoster.update({
       where: { id },
-      data,
+      data: { ...data },
     });
   }
 

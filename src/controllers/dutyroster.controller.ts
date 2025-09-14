@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import dutyrosterService from "../services/dutyroster.service";
-import { DutyRoster } from "@prisma/client";
+import { DutyRoster, Shift } from "@prisma/client";
 import { ApiError } from "../middleware/errorHandler";
 
 class DutyRosterController {
@@ -26,6 +26,19 @@ class DutyRosterController {
     }
   }
 
+  async getUserRosters(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params;
+      const rosters = await dutyrosterService.getRostersByUserId(userId);
+      res.json({
+        message: "User rosters retrieved successfully",
+        data: rosters,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async createRoster(req: Request, res: Response, next: NextFunction) {
     try {
       const {
@@ -37,7 +50,7 @@ class DutyRosterController {
       await dutyrosterService.createRoster({
         addedById,
         date,
-        shift,
+        shift: shift.toUpperCase() as Shift,
       });
       res.status(201).json({ message: "Roster created successfully" });
     } catch (e) {
@@ -57,7 +70,7 @@ class DutyRosterController {
       await dutyrosterService.updateRoster(id, {
         addedById,
         date,
-        shift,
+        shift: shift.toUpperCase() as Shift,
       });
       res.json({ message: "Roster updated successfully" });
     } catch (e) {
