@@ -51,7 +51,7 @@ model Assignment {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   dutyRoster DutyRoster @relation(fields: [dutyRosterId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   assignedBy User       @relation("AssignedBy", fields: [assignedById], references: [id])
 
   @@unique([userId, dutyRosterId])

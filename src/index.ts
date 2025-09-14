@@ -11,6 +11,7 @@ import { requestLogger } from "./middleware/requestLogger";
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
 import dutyRosterRouter from "./routes/dutyroster.route";
+import assignmentRouter from "./routes/assignment.route";
 
 // Import Prisma client
 import prisma from "./utils/prisma";
@@ -71,6 +72,7 @@ app.get("/health", (req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/dutyrosters", dutyRosterRouter);
+app.use("/api/assignments", assignmentRouter);
 
 // Error handling middleware
 app.use(errorHandler);
