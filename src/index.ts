@@ -14,6 +14,7 @@ import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
 import dutyRosterRouter from "./routes/dutyroster.route";
 import assignmentRouter from "./routes/assignment.route";
+import notificationRouter from "./routes/notification.route";
 
 // Import Prisma client
 import prisma from "./utils/prisma";
@@ -76,6 +77,7 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/dutyrosters", dutyRosterRouter);
 app.use("/api/assignments", assignmentRouter);
+app.use("/api/notifications", notificationRouter);
 
 // Error handling middleware
 app.use(errorHandler);

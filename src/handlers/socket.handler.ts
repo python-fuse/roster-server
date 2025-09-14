@@ -1,5 +1,4 @@
 import type { Server } from "socket.io";
-import prisma from "../utils/prisma";
 import userService from "../services/user.service";
 
 export const setupSocketHandlers = (io: Server) => {
@@ -9,6 +8,7 @@ export const setupSocketHandlers = (io: Server) => {
     // Add user to their personal room based on userId
     socket.on("join", async (userId: string) => {
       socket.join(`user:${userId}`);
+      console.log(`User ${userId} joined their personal room`);
 
       const user = await userService.getUserById(userId);
       if (user) {

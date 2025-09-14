@@ -5,6 +5,7 @@ import { Notification, NotificationType, Role } from "@prisma/client";
 export class NotificationEmitter {
   static emitToUser(userId: string, notification: Notification) {
     io.to(`user:${userId}`).emit("notification", notification);
+    console.log(`Emitted notification to user:${userId}`);
   }
 
   static emitToAll(notification: Notification) {
