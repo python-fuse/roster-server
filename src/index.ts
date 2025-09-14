@@ -10,6 +10,9 @@ import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
+import dutyRosterRouter from "./routes/dutyroster.route";
+
+// Import Prisma client
 import prisma from "./utils/prisma";
 
 // Load environment variables
@@ -67,6 +70,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/dutyrosters", dutyRosterRouter);
 
 // Error handling middleware
 app.use(errorHandler);
