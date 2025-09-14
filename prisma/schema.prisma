@@ -58,13 +58,16 @@ model Assignment {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String           @id @default(cuid())
   userId    String
   message   String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  metadata  String?
+  type      NotificationType
+  title     String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id])
 }
 
 model Session {
@@ -84,4 +87,14 @@ enum Shift {
   MORNING
   EVENING
   NIGHT
+}
+
+enum NotificationType {
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_UPDATED
+  ASSIGNMENT_DELETED
+  DUTY_ROSTER_CREATED
+  DUTY_ROSTER_UPDATED
+  SYSTEM_ANNOUNCEMENT
+  REMINDER
 }
