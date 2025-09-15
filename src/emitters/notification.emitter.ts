@@ -1,6 +1,6 @@
 import { io } from "../index";
 
-import { Notification, NotificationType, Role } from "@prisma/client";
+import { Notification, Role } from "@prisma/client";
 
 export class NotificationEmitter {
   static emitToUser(userId: string, notification: Notification) {
