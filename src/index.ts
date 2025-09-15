@@ -10,6 +10,7 @@ import http from "http";
 // Import middleware
 import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";
+import { authenticate } from "./middleware/authenticate";
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
 import dutyRosterRouter from "./routes/dutyroster.route";
@@ -73,11 +74,11 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "Server is running" });
 });
 
-app.use("/api/users", userRouter);
+app.use("/api/users", authenticate, userRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/dutyrosters", dutyRosterRouter);
-app.use("/api/assignments", assignmentRouter);
-app.use("/api/notifications", notificationRouter);
+app.use("/api/dutyrosters", authenticate, dutyRosterRouter);
+app.use("/api/assignments", authenticate, assignmentRouter);
+app.use("/api/notifications", authenticate, notificationRouter);
 
 // Error handling middleware
 app.use(errorHandler);

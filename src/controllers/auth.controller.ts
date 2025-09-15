@@ -9,6 +9,7 @@ class AuthController {
     try {
       const loginData = await authService.login({ email, password });
       req.session.userId = loginData.user.id;
+      req.session.user = { ...loginData.user, password: "" };
 
       res.status(200).json(loginData);
       return;
@@ -46,7 +47,9 @@ class AuthController {
         }
 
         res.status(200).json({ message: "Logout Successful" });
+        return;
       });
+      return;
     }
 
     res.status(400).json({ message: "Your not logged in, Please login!" });

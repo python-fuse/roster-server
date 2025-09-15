@@ -3,7 +3,9 @@ import prisma from "../utils/prisma";
 import { Notification, Role } from "@prisma/client";
 
 export class NotificationService {
-  static async createNotification(data: Omit<Notification, "id">) {
+  static async createNotification(
+    data: Omit<Notification, "id" | "createdAt" | "updatedAt">
+  ) {
     const notification = await prisma.notification.create({
       data,
       include: { user: true },

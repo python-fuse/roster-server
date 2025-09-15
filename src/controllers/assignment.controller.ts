@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Assignment, DutyRoster, Shift } from "@prisma/client";
 import assignmentService from "../services/assignment.service";
+import { NotificationService } from "../services/notification.service";
 
 class AssignmentController {
   async getAllAssignments(req: Request, res: Response, next: NextFunction) {
@@ -74,6 +75,16 @@ class AssignmentController {
           assignedById,
           dutyRosterId,
         });
+
+      await NotificationService.createNotification({
+        userId,
+        title: "New Assignment Created",
+        message: `You have been assigned a new duty roster. Please check your assignments for details.`,
+        read: false,
+        metadata: `assignmentId: ${newAssignment.id}`,
+        type: "ASSIGNMENT_CREATED",
+      });
+
       res
         .status(201)
         .json({ message: "Assignment created successfully", newAssignment });
