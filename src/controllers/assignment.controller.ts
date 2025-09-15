@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Assignment, DutyRoster, Shift } from "@prisma/client";
 import assignmentService from "../services/assignment.service";
 import { NotificationService } from "../services/notification.service";
+import dutyrosterService from "../services/dutyroster.service";
 
 class AssignmentController {
   async getAllAssignments(req: Request, res: Response, next: NextFunction) {
@@ -80,7 +81,6 @@ class AssignmentController {
         userId,
         title: "New Assignment Created",
         message: `You have been assigned a new duty roster. Please check your assignments for details.`,
-        read: false,
         metadata: `assignmentId: ${newAssignment.id}`,
         type: "ASSIGNMENT_CREATED",
       });
@@ -99,6 +99,24 @@ class AssignmentController {
       const data: Partial<Assignment> = req.body;
       const updatedAssignment: Assignment =
         await assignmentService.updateAssignment(id, data);
+
+      const dutyRoster: DutyRoster | null =
+        await dutyrosterService.getRosterById(updatedAssignment.dutyRosterId);
+
+      if (!dutyRoster) {
+        res.status(404).json({ message: "Duty Roster not found" });
+        return;
+      }
+
+      // Notify user about assignment update
+      await NotificationService.createNotification({
+        userId: updatedAssignment.userId,
+        title: "Assignment Updated",
+        message: `Your assignment for duty roster on ${dutyRoster.date} has been updated.`,
+        metadata: `assignmentId: ${updatedAssignment.id}`,
+        type: "ASSIGNMENT_UPDATED",
+      });
+
       res.status(200).json({
         message: "Assignment updated successfully",
         updatedAssignment,
@@ -113,6 +131,24 @@ class AssignmentController {
       const { id } = req.params;
       const deletedAssignment: Assignment =
         await assignmentService.deleteAssignment(id);
+
+      const dutyRoster: DutyRoster | null =
+        await dutyrosterService.getRosterById(deletedAssignment.dutyRosterId);
+
+      if (!dutyRoster) {
+        res.status(404).json({ message: "Duty Roster not found" });
+        return;
+      }
+
+      // Notify user about assignment deletion
+      await NotificationService.createNotification({
+        userId: deletedAssignment.userId,
+        title: "Assignment Deleted",
+        message: `Your assignment for duty roster on ${dutyRoster.date} has been deleted.`,
+        metadata: `assignmentId: ${deletedAssignment.id}`,
+        type: "ASSIGNMENT_DELETED",
+      });
+
       res.status(200).json({
         message: "Assignment deleted successfully",
         deletedAssignment,
