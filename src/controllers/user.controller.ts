@@ -6,14 +6,12 @@ class UserController {
   async getUsers(req: Request, res: Response): Promise<void> {
     const users = await userService.getAllUsers();
 
-    res
-      .status(200)
-      .json({
-        users,
-        message: "Users fetched successfully",
-      })
+    res.status(200).json({
+      users,
+      message: "Users fetched successfully",
+    });
 
-      .send();
+    return;
   }
 
   async getUser(req: Request, res: Response): Promise<void> {
