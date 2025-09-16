@@ -3,6 +3,16 @@ import { NextFunction, Request, Response } from "express";
 import { Role, User } from "@prisma/client";
 
 class AuthController {
+  async getUserInfo(req: Request, res: Response, next: NextFunction) {
+    if (req.session.userId) {
+      res.status(200).json({ user: req.session.user });
+      return;
+    } else {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+  }
+
   async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
 
