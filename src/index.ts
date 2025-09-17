@@ -52,8 +52,6 @@ app.use(
     cookie: {
       maxAge: 24 * 3600 * 1000,
       httpOnly: true,
-      secure: false,
-      sameSite: "none",
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000, // 2 minutes
