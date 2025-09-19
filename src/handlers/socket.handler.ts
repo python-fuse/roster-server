@@ -1,5 +1,6 @@
 import type { Server } from "socket.io";
 import userService from "../services/user.service";
+import { NotificationService } from "../services/notification.service";
 
 export const setupSocketHandlers = (io: Server) => {
   io.on("connection", (socket) => {
@@ -16,6 +17,15 @@ export const setupSocketHandlers = (io: Server) => {
       }
 
       console.log(`User ${userId} joined their personal room and role room`);
+    });
+
+    socket.on("markAsRead", async (notificationId) => {
+      const updated = await NotificationService.updateNotification(
+        notificationId,
+        { read: true }
+      );
+
+      io.to(`user:${updated.userId}`).emit("readNotification", updated);
     });
 
     socket.on("disconnect", () => {
