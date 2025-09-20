@@ -17,7 +17,20 @@ class AssignmentService {
   async getAssignmentsByAssignerId(
     assignById: Assignment["assignedById"]
   ): Promise<Assignment[]> {
-    return prisma.assignment.findMany({ where: { assignedById: assignById } });
+    return prisma.assignment.findMany({
+      where: { assignedById: assignById },
+      include: {
+        dutyRoster: true,
+        assignedBy: {
+          select: {
+            name: true,
+            id: true,
+            email: true,
+            role: true,
+          },
+        },
+      },
+    });
   }
 
   async createAssignment(
