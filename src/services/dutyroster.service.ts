@@ -3,19 +3,30 @@ import prisma from "../utils/prisma";
 
 class DutyRosterService {
   async getAllRosters() {
-    return await prisma.dutyRoster.findMany();
+    return await prisma.dutyRoster.findMany({
+      include: { assignment: true, createdBy: true },
+    });
   }
 
   async getRosterById(id: DutyRoster["id"]) {
-    return await prisma.dutyRoster.findUnique({ where: { id } });
+    return await prisma.dutyRoster.findUnique({
+      where: { id },
+      include: { assignment: true, createdBy: true },
+    });
   }
 
   async getRostersByUserId(userId: DutyRoster["addedById"]) {
-    return await prisma.dutyRoster.findMany({ where: { addedById: userId } });
+    return await prisma.dutyRoster.findMany({
+      where: { addedById: userId },
+      include: { assignment: true, createdBy: true },
+    });
   }
 
   async getRostersByDate(date: DutyRoster["date"]) {
-    return await prisma.dutyRoster.findMany({ where: { date } });
+    return await prisma.dutyRoster.findMany({
+      where: { date },
+      include: { assignment: true, createdBy: true },
+    });
   }
 
   async createRoster(data: Omit<DutyRoster, "id" | "createdAt" | "updatedAt">) {

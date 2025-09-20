@@ -3,15 +3,28 @@ import { Assignment } from "@prisma/client";
 
 class AssignmentService {
   async getAllAssignments(): Promise<Assignment[]> {
-    return prisma.assignment.findMany();
+    return prisma.assignment.findMany({
+      include: { dutyRoster: true, assignedBy: true, user: true },
+    });
   }
 
   async getAssignmentById(id: string): Promise<Assignment | null> {
-    return prisma.assignment.findUnique({ where: { id } });
+    return prisma.assignment.findUnique({
+      where: { id },
+      include: { dutyRoster: true, assignedBy: true, user: true },
+    });
   }
 
   async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
-    return prisma.assignment.findMany({ where: { userId } });
+    return prisma.assignment.findMany({
+      where: { userId },
+      include: {
+        dutyRoster: true,
+        assignedBy: {
+          select: { name: true, id: true, email: true, role: true },
+        },
+      },
+    });
   }
 
   async getAssignmentsByAssignerId(
